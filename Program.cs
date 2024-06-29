@@ -10,10 +10,13 @@ namespace E2EMantis
 
         static void Main(string[] args)
         {
+            string pathFixtures = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
+
             // Configurar o carregamento do appsettings.json
             var builder = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile(pathFixtures + "/Fixtures/error_message.json", optional: false, reloadOnChange: true);
 
             Configuration = builder.Build();
 

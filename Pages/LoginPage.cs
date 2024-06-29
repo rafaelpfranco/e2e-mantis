@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using System.Security.Cryptography.X509Certificates;
 
 namespace E2EMantis.Pages
 {
@@ -15,9 +16,9 @@ namespace E2EMantis.Pages
         private IWebElement UsernameField => _driver.FindElement(By.Id("username"));
         private IWebElement PasswordField => _driver.FindElement(By.Id("password"));
         private IWebElement EnterButton => _driver.FindElement(By.CssSelector("input[type='submit'].btn-success"));
-        private IWebElement navBrand => _driver.FindElement(By.CssSelector(".smaller-75"));
-        private IWebElement userNameInfo => _driver.FindElement(By.CssSelector(".user-info"));
-
+        private IWebElement NavBrand => _driver.FindElement(By.CssSelector(".smaller-75"));
+        private IWebElement UserNameInfo => _driver.FindElement(By.CssSelector(".user-info"));
+        private IWebElement ErroMessage => _driver.FindElement(By.CssSelector(".alert.alert-danger"));
 
         // Métodos para interagir com a página
         public void EnterUsername(string username)
@@ -44,28 +45,35 @@ namespace E2EMantis.Pages
         }
 
         // Asserts
-        public void headerValidate()
+        public void HeaderValidate()
         {
             string expectedText = "MantisBT";
-            string actualText = navBrand.Text;
+            string actualText = NavBrand.Text;
 
             Assert.AreEqual(expectedText, actualText, $"O nome do sistema exibido:'{actualText}' não corresponde ao nome do sistema esperado '{expectedText}'.");
         }
 
-        public void userNameValidate(string username)
+        public void UserNameValidate(string username)
         {
-            string actualText = userNameInfo.Text;
+            string actualText = UserNameInfo.Text;
 
             Assert.AreEqual(username, actualText, $"O nome do usuário exibido:'{actualText}' não corresponde ao nome do usuário esperado '{username}'.");
         }
 
-        public void homePageValidate(string baseUrl)
+        public void UrlValidate(string baseUrl)
         {
-            string urlAtual = _driver.Url;
+            string actualUrl = _driver.Url;
 
-            string urlEsperada = baseUrl + "/my_view_page.php";
+            string expectUrl = baseUrl;
 
-            Assert.AreEqual(urlEsperada, urlAtual, $"A URL atual '{urlAtual}' não corresponde à URL esperada '{urlEsperada}'.");
+            Assert.AreEqual(expectUrl, actualUrl, $"A URL atual '{actualUrl}' não corresponde à URL esperada '{expectUrl}'.");
+        }
+
+        public void ErrorMessageValidate(string erro) 
+        {
+            string actualText = ErroMessage.Text;
+
+            Assert.AreEqual(erro, actualText, $"A mensagem de erro exibida:'{actualText}' não corresponde com a mensagem de erro esperada '{erro}'.");
         }
     }
 }
