@@ -1,0 +1,70 @@
+# Arquivos de compilação do Visual Studio
+*.user
+*.vs/
+*_i.c
+*_p.c
+*.ilk
+*.meta
+*.obj
+*.pch
+*.pdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*.log
+*.vspscc
+*.vssscc
+.builds
+
+# Arquivos gerados pelo MSBuild
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+[Aa][Rr][Tt]ifacts/
+*_ReSharper*/
+*.resharper
+[Tt]humbs.db
+[Tt]est[Rr]esult*
+*.VisualState.xml
+_ReSharper*/
+*.csproj.user
+
+# Ignorar diretórios específicos
+bin/
+obj/
+
+# Arquivos específicos do Selenium WebDriver
+geckodriver.log
+
+# Arquivos de configuração do IDE
+*.suo
+*.ntvs*
+*.njsproj
+*.sln.docstates
+
+# Pacotes NuGet
+packages/
+*.nupkg
+*.paket.restore.log
+
+# Arquivos de compilação do Mono
+*.pidb
+*.userprefs
+
+# Cache do Rider
+.idea/
+
+# Diretório de saída do MSBuild
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Nn][Yy]/
+
+# Arquivos de dados
+*.sqlite
