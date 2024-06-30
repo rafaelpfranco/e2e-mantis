@@ -28,5 +28,6 @@ namespace E2EMantis.Interfaces
         void ToolTipValidate(IWebElement element, string expectedMessage);
         void CreateNoteIssue(string note);
         void CreateNoteWithImageIssue(string path);
+        void SumarayValidate(string expectedMessage);
     }
 }

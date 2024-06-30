@@ -41,8 +41,7 @@ namespace E2EMantis.Pages
         public IWebElement NoteText => _driver.FindElement(By.Id("bugnote_text"));
         public IWebElement CreateNote => _driver.FindElement(By.CssSelector("input[type='submit'][value='Adicionar Anotação']"));
         public IWebElement CommentsField => _driver.FindElement(By.CssSelector("#bugnotes tbody tr:last-child"));
-
-        //private IWebElement AlertErro => _driver.SwitchTo().Alert();
+        private IWebElement SumaryIssue => _driver.FindElement(By.CssSelector(".bug-summary:not(.category)"));
 
         public void TypeElement(IWebElement element, string text)
         {
@@ -144,5 +143,10 @@ namespace E2EMantis.Pages
             Assert.AreEqual(expectedMessage, ErroMessage, $"A mensagem atual '{ErroMessage}' não é igual a mensagem esperada '{expectedMessage}'.");
         }
 
+        public void SumarayValidate(string expectedMessage)
+        {
+            string actualMessage = SumaryIssue.Text;
+            Assert.IsTrue(actualMessage.Contains(expectedMessage), $"A mensagem atual '{actualMessage}' não contém a mensagem esperada '{expectedMessage}'.");
+        }
     }
 }

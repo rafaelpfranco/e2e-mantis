@@ -10,7 +10,8 @@ namespace E2EMantis.Interfaces
     public interface IViewIssuesPage
     {
         void SearchElement(string searchText);
-        void FindElementInTable(string searchText);
         void OpenIssue();
+        void SearchById(string searchText);
+        void FindElementInTable(string searchText);
     }
 }

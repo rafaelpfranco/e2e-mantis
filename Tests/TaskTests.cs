@@ -54,12 +54,12 @@ namespace E2EMantis.Tests
             _loginPage.Login(UserName, Password);
         }
 
-        //[TearDown]
-        //public void TearDown()
-        //{
-        //    _driver.Dispose();
-        //    _driver = null;
-        //}
+        [TearDown]
+        public void TearDown()
+        {
+            _driver.Dispose();
+            _driver = null;
+        }
         private void SetupDriver()
         {
             string path = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
@@ -94,20 +94,20 @@ namespace E2EMantis.Tests
             string path = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
             string pathFixtures = Path.Combine(path, "Fixtures", "bug-report.jpg");
             string issueName = GenerateData.GenerateIssueName();
-            //NavigateToCreateIssue();
+            NavigateToCreateIssue();
 
-            //_taskPage.CreateIssue("[Todos os Projetos] categoria teste", "sempre", "grande", "normal", "Windows", "Windows 10", "10.0.0", issueName, "This is a test description", "No steps to reproduce", "No additional info", false, "tagTest1,tagTest2", "bug", pathFixtures);
+            _taskPage.CreateIssue("[Todos os Projetos] categoria teste", "sempre", "grande", "normal", "Windows", "Windows 10", "10.0.0", issueName, "This is a test description", "No steps to reproduce", "No additional info", false, "tagTest1,tagTest2", "bug", pathFixtures);
 
-            //// Asserts
-            //_taskPage.MessageValidate(_taskPage.sucessMessage, SuccessIssue);
+            // Asserts
+            _taskPage.MessageValidate(_taskPage.SucessMessage, SuccessIssue);
 
-            //Thread.Sleep(2000);
+            Thread.Sleep(2000);
             NavigateToViewIssue();
 
-            _viewIssuesPage.SearchElement("Sleek Cotton Sausages");
-           
+            _viewIssuesPage.SearchElement(issueName);
+
             // Asserts
-            _viewIssuesPage.FindElementInTable("Sleek Cotton Sausages");
+            _viewIssuesPage.FindElementInTable(issueName);
 
         }
 

@@ -21,6 +21,7 @@ namespace E2EMantis.Pages
         private IWebElement SearchTextButton => _driver.FindElement(By.CssSelector("input[name='filter_submit'][type='submit']\r\n"));
         private IWebElement TableList => _driver.FindElement(By.CssSelector("#bug_action tbody tr"));
         private IWebElement IssueLink => TableList.FindElement(By.CssSelector(".column-id a"));
+        private IWebElement IssueIdInput => _driver.FindElement(By.CssSelector("input[name='bug_id']"));
 
         public void SearchElement(string searchText)
         {
@@ -28,6 +29,16 @@ namespace E2EMantis.Pages
             SearchTextField.SendKeys(searchText);
 
             SearchTextButton.Click();
+        }
+        public void SearchById(string searchText)
+        {
+            IssueIdInput.Clear();
+            IssueIdInput.SendKeys(searchText);
+            IssueIdInput.SendKeys(Keys.Enter);
+        }
+        public void OpenIssue()
+        {
+            IssueLink.Click();
         }
 
         // Assertions
@@ -37,9 +48,5 @@ namespace E2EMantis.Pages
            Assert.IsTrue(isElementFound, "Elemento não encontrado na tabela.");
         }
 
-        public void OpenIssue()
-        {
-            IssueLink.Click();
-        }
     }
 }

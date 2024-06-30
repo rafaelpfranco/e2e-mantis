@@ -3,7 +3,8 @@
     "invalid_login": "Sua conta pode estar desativada ou bloqueada ou o nome de usuário e a senha que você digitou não estão corretos.",
     "without_category": "Um campo necessário 'category' estava vazio. Por favor, verifique novamente suas entradas.",
     "empty_fields": "Preencha este campo.",
-    "without_anotation": "Um campo necessário 'Anotação' estava vazio. Por favor, verifique novamente suas entradas."
+    "without_anotation": "Um campo necessário 'Anotação' estava vazio. Por favor, verifique novamente suas entradas.",
+    "search_issue_empty_id": "A tarefa 0 não encontrada."
   },
   "Success": {
     "new_issue": "Operação realizada com sucesso."
