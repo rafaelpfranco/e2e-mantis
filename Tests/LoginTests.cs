@@ -1,11 +1,11 @@
-﻿// Tests/LoginTests.cs
-using System;
+﻿using System;
 using System.IO;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using E2EMantis.Pages;
+using E2EMantis.Interfaces;
 
 namespace E2EMantis.Tests
 {
@@ -13,7 +13,9 @@ namespace E2EMantis.Tests
     public class LoginTests
     {
         private IWebDriver _driver;
-        private LoginPage _loginPage;
+        private ILoginPage _loginPage;
+        private INavBarPage _navBarPage;
+
         private static IConfiguration Configuration { get; set; }
 
         private static string BaseUrl { get; set; }
@@ -24,21 +26,13 @@ namespace E2EMantis.Tests
         [OneTimeSetUp]
         public void GlobalSetup()
         {
-            string pathFixtures = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
-
-            // Configurar o carregamento do appsettings.json
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(AppContext.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile(pathFixtures + "/Fixtures/error_message.json", optional: false, reloadOnChange: true);
-
-            Configuration = builder.Build();
+            Program.ConfigureSettings();
 
             // Inicializar propriedades com valores da configuração
-            BaseUrl = Configuration["Environment:BaseUrl"];
-            UserName = Configuration["Environment:UserName"];
-            Password = Configuration["Environment:Password"];
-            ErrorLogin = Configuration["Error:invalid_login"];
+            BaseUrl = Program.Configuration["Environment:BaseUrl"];
+            UserName = Program.Configuration["User:UserName"];
+            Password = Program.Configuration["User:Password"];
+            ErrorLogin = Program.Configuration["Error:invalid_login"];
         }
 
         [SetUp]
@@ -61,6 +55,7 @@ namespace E2EMantis.Tests
             var options = new ChromeOptions();
             _driver = new ChromeDriver(path + @"\drivers\", options);
             _loginPage = new LoginPage(_driver);
+            _navBarPage = new NavBarPage(_driver);
         }
 
         private void NavigateToLoginPage()
@@ -136,6 +131,20 @@ namespace E2EMantis.Tests
             // Asserts
             _loginPage.ErrorMessageValidate(ErrorLogin);
             _loginPage.UrlValidate(BaseUrl + "/login_page.php?error=1&username=" + UserName + "&return=my_view_page.php");
+        }
+
+        [Test]
+        public void Logout()
+        {
+            NavigateToLoginPage();
+
+            // Realizar o login
+            _loginPage.Login(UserName, Password);
+
+            _navBarPage.LogoutUser();
+
+            // Asserts
+            _loginPage.UrlValidate(BaseUrl + "/login_page.php");
         }
     }
 }

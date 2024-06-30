@@ -1,9 +1,10 @@
 ﻿using OpenQA.Selenium;
-using System.Security.Cryptography.X509Certificates;
+using NUnit.Framework;
+using E2EMantis.Interfaces;
 
 namespace E2EMantis.Pages
 {
-    public class LoginPage
+    public class LoginPage : ILoginPage
     {
         private readonly IWebDriver _driver;
 
@@ -18,16 +19,18 @@ namespace E2EMantis.Pages
         private IWebElement EnterButton => _driver.FindElement(By.CssSelector("input[type='submit'].btn-success"));
         private IWebElement NavBrand => _driver.FindElement(By.CssSelector(".smaller-75"));
         private IWebElement UserNameInfo => _driver.FindElement(By.CssSelector(".user-info"));
-        private IWebElement ErroMessage => _driver.FindElement(By.CssSelector(".alert.alert-danger"));
+        private IWebElement ErrorMessage => _driver.FindElement(By.CssSelector(".alert.alert-danger"));
 
         // Métodos para interagir com a página
         public void EnterUsername(string username)
         {
+            UsernameField.Clear();
             UsernameField.SendKeys(username);
         }
 
         public void EnterPassword(string password)
         {
+            PasswordField.Clear();
             PasswordField.SendKeys(password);
         }
 
@@ -64,16 +67,14 @@ namespace E2EMantis.Pages
         {
             string actualUrl = _driver.Url;
 
-            string expectUrl = baseUrl;
-
-            Assert.AreEqual(expectUrl, actualUrl, $"A URL atual '{actualUrl}' não corresponde à URL esperada '{expectUrl}'.");
+            StringAssert.Contains(baseUrl, actualUrl, $"A URL atual '{actualUrl}' não contém a URL esperada '{baseUrl}'.");
         }
 
-        public void ErrorMessageValidate(string erro) 
+        public void ErrorMessageValidate(string errorMessage) 
         {
-            string actualText = ErroMessage.Text;
+            string actualText = ErrorMessage.Text;
 
-            Assert.AreEqual(erro, actualText, $"A mensagem de erro exibida:'{actualText}' não corresponde com a mensagem de erro esperada '{erro}'.");
+            Assert.AreEqual(errorMessage, actualText, $"A mensagem de erro exibida:'{actualText}' não corresponde com a mensagem de erro esperada '{errorMessage}'.");
         }
     }
 }

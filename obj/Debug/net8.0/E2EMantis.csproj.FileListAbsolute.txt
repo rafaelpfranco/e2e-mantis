@@ -225,3 +225,5 @@ C:\Users\Rafael\Documents\test\e2e-mantis\E2EMantis\obj\Debug\net8.0\E2EMantis.p
 C:\Users\Rafael\Documents\test\e2e-mantis\E2EMantis\obj\Debug\net8.0\E2EMantis.genruntimeconfig.cache
 C:\Users\Rafael\Documents\test\e2e-mantis\E2EMantis\obj\Debug\net8.0\ref\E2EMantis.dll
 C:\Users\Rafael\Documents\test\e2e-mantis\E2EMantis\obj\Debug\net8.0\E2EMantis.sourcelink.json
+C:\Users\Rafael\Documents\test\e2e-mantis\E2EMantis\bin\Debug\net8.0\Bogus.dll
+C:\Users\Rafael\Documents\test\e2e-mantis\E2EMantis\bin\Debug\net8.0\SeleniumExtras.WaitHelpers.dll
