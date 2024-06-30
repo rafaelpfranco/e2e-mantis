@@ -22,6 +22,7 @@
 *.vssscc
 .builds
 
+
 # Arquivos gerados pelo MSBuild
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
