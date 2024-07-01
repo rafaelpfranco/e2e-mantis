@@ -23,45 +23,11 @@ namespace E2EMantis.Tests
         private static string Password { get; set; }
         private static string ErrorLogin { get; set; }
 
-        [OneTimeSetUp]
-        public void GlobalSetup()
-        {
-            Program.ConfigureSettings();
-
-            // Inicializar propriedades com valores da configuração
-            BaseUrl = Program.Configuration["Environment:BaseUrl"];
-            UserName = Program.Configuration["User:UserName"];
-            Password = Program.Configuration["User:Password"];
-            ErrorLogin = Program.Configuration["Error:invalid_login"];
-        }
-
         [SetUp]
         public void SetUp()
         {
             SetupDriver();
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            _driver.Dispose();
-            _driver = null;
-        }
-
-        private void SetupDriver()
-        {
-            string path = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
-
-            var options = new ChromeOptions();
-            _driver = new ChromeDriver(path + @"\drivers\", options);
-            _loginPage = new LoginPage(_driver);
-            _navBarPage = new NavBarPage(_driver);
-        }
-
-        private void NavigateToLoginPage()
-        {
-            _driver.Navigate().GoToUrl(BaseUrl + "/login.php");
-        }
+        } 
 
         [Test]
         public void LoginValidCredentials()
@@ -145,6 +111,40 @@ namespace E2EMantis.Tests
 
             // Asserts
             _loginPage.UrlValidate(BaseUrl + "/login_page.php");
+        }
+
+        [OneTimeSetUp]
+        public void GlobalSetup()
+        {
+            Program.ConfigureSettings();
+
+            // Inicializar propriedades com valores da configuração
+            BaseUrl = Program.Configuration["Environment:BaseUrl"];
+            UserName = Program.Configuration["User:UserName"];
+            Password = Program.Configuration["User:Password"];
+            ErrorLogin = Program.Configuration["Error:invalid_login"];
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _driver.Dispose();
+            _driver = null;
+        }
+
+        private void SetupDriver()
+        {
+            string path = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
+
+            var options = new ChromeOptions();
+            _driver = new ChromeDriver(path + @"\drivers\", options);
+            _loginPage = new LoginPage(_driver);
+            _navBarPage = new NavBarPage(_driver);
+        }
+
+        private void NavigateToLoginPage()
+        {
+            _driver.Navigate().GoToUrl(BaseUrl + "/login.php");
         }
     }
 }

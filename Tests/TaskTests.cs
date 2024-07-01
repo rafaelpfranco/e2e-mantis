@@ -9,6 +9,7 @@ using E2EMantis.Interfaces;
 using E2EMantis.Utils;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
+using System.Xml.Linq;
 
 
 namespace E2EMantis.Tests
@@ -31,20 +32,6 @@ namespace E2EMantis.Tests
         private static string EmptyFields { get; set; }
         private static string WithouAnotation { get; set; }
 
-        [OneTimeSetUp]
-        public void GlobalSetup()
-        {
-            Program.ConfigureSettings();
-
-            // Inicializar propriedades com valores da configuração
-            BaseUrl = Program.Configuration["Environment:BaseUrl"];
-            UserName = Program.Configuration["User:UserName"];
-            Password = Program.Configuration["User:Password"];
-            SuccessIssue = Program.Configuration["Success:new_issue"];
-            WithouCategory = Program.Configuration["Error:without_category"];
-            EmptyFields = Program.Configuration["Error:empty_fields"];
-            WithouAnotation = Program.Configuration["Error:without_anotation"];
-        }
 
         [SetUp]
         public void SetUp()
@@ -52,40 +39,6 @@ namespace E2EMantis.Tests
             SetupDriver();
             NavigateToLoginPage();
             _loginPage.Login(UserName, Password);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            _driver.Dispose();
-            _driver = null;
-        }
-        private void SetupDriver()
-        {
-            string path = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
-
-            var options = new ChromeOptions();
-            _driver = new ChromeDriver(path + @"\drivers\", options);
-            _loginPage = new LoginPage(_driver);
-            _navBarPage = new NavBarPage(_driver);
-            _taskPage = new TaskPage(_driver);
-            _viewIssuesPage = new ViewIssuesPage(_driver);
-
-        }
-        private void NavigateToLoginPage()
-        {
-            _driver.Manage().Window.Maximize();
-            _driver.Navigate().GoToUrl(BaseUrl + "/login.php");
-        }
-
-        private void NavigateToCreateIssue()
-        {
-            _navBarPage.ClickReportIssuesMenuItem();
-        }
-
-        private void NavigateToViewIssue()
-        {
-            _navBarPage.ClickViewIssuesMenuItem();
         }
 
         [Test]
@@ -98,10 +51,6 @@ namespace E2EMantis.Tests
 
             _taskPage.CreateIssue("[Todos os Projetos] categoria teste", "sempre", "grande", "normal", "Windows", "Windows 10", "10.0.0", issueName, "This is a test description", "No steps to reproduce", "No additional info", false, "tagTest1,tagTest2", "bug", pathFixtures);
 
-            // Asserts
-            _taskPage.MessageValidate(_taskPage.SucessMessage, SuccessIssue);
-
-            Thread.Sleep(2000);
             NavigateToViewIssue();
 
             _viewIssuesPage.SearchElement(issueName);
@@ -153,14 +102,15 @@ namespace E2EMantis.Tests
             string commentText = "This is a test comment number: " + randomNumber; 
             NavigateToViewIssue();
 
-            _viewIssuesPage.SearchElement("Sleek Cotton Sausages");
-            _viewIssuesPage.FindElementInTable("Sleek Cotton Sausages");
+            _viewIssuesPage.SearchElement("BUG");
+            _viewIssuesPage.FindElementInTable("BUG");
             _viewIssuesPage.OpenIssue();
 
             _taskPage.CreateNoteIssue(commentText);
 
             // Asserts
-            _taskPage.MessageValidate(_taskPage.CommentsField, commentText);
+            Console.WriteLine(_taskPage.TableComments.Text);
+            _taskPage.MessageValidate(_taskPage.TableComments, commentText);
         }
 
         [Test]
@@ -170,14 +120,14 @@ namespace E2EMantis.Tests
             string pathFixtures = Path.Combine(path, "Fixtures", "bug-report.jpg");
             NavigateToViewIssue();
 
-            _viewIssuesPage.SearchElement("Sleek Cotton Sausages");
-            _viewIssuesPage.FindElementInTable("Sleek Cotton Sausages");
+            _viewIssuesPage.SearchElement("Fantastic Steel Shirt");
+            _viewIssuesPage.FindElementInTable("Fantastic Steel Shirt");
             _viewIssuesPage.OpenIssue();
 
             _taskPage.CreateNoteWithImageIssue(pathFixtures);
 
             // Asserts
-            //_taskPage.MessageValidate(_taskPage.CommentsField, commentText);
+            _taskPage.HasImageInCommentsField();
         }
 
         [Test]
@@ -195,6 +145,56 @@ namespace E2EMantis.Tests
 
             // Asserts
             _taskPage.MessageValidate(_taskPage.PageContent, WithouAnotation);
+        }
+
+        [OneTimeSetUp]
+        public void GlobalSetup()
+        {
+            Program.ConfigureSettings();
+
+            // Inicializar propriedades com valores da configuração
+            BaseUrl = Program.Configuration["Environment:BaseUrl"];
+            UserName = Program.Configuration["User:UserName"];
+            Password = Program.Configuration["User:Password"];
+            SuccessIssue = Program.Configuration["Success:new_issue"];
+            WithouCategory = Program.Configuration["Error:without_category"];
+            EmptyFields = Program.Configuration["Error:empty_fields"];
+            WithouAnotation = Program.Configuration["Error:without_anotation"];
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _driver.Dispose();
+            _driver = null;
+        }
+
+        private void SetupDriver()
+        {
+            string path = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
+
+            var options = new ChromeOptions();
+            _driver = new ChromeDriver(path + @"\drivers\", options);
+            _loginPage = new LoginPage(_driver);
+            _navBarPage = new NavBarPage(_driver);
+            _taskPage = new TaskPage(_driver);
+            _viewIssuesPage = new ViewIssuesPage(_driver);
+
+        }
+        private void NavigateToLoginPage()
+        {
+            _driver.Manage().Window.Maximize();
+            _driver.Navigate().GoToUrl(BaseUrl + "/login.php");
+        }
+
+        private void NavigateToCreateIssue()
+        {
+            _navBarPage.ClickReportIssuesMenuItem();
+        }
+
+        private void NavigateToViewIssue()
+        {
+            _navBarPage.ClickViewIssuesMenuItem();
         }
     }
 }

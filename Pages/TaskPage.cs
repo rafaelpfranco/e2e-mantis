@@ -3,7 +3,6 @@ using NUnit.Framework;
 using E2EMantis.Interfaces;
 using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium.Interactions;
-using System;
 
 namespace E2EMantis.Pages
 {
@@ -36,11 +35,12 @@ namespace E2EMantis.Pages
         private IWebElement PrivateRadio => _driver.FindElement(By.CssSelector("input[type='radio'][value='50']"));
         private IWebElement MoreIssueSelect => _driver.FindElement(By.Id("report_stay"));
         public IWebElement CreateIssueButton => _driver.FindElement(By.CssSelector("input[type='submit'][value='Criar Nova Tarefa']"));
-        public IWebElement SucessMessage => _driver.FindElement(By.CssSelector(".bold.bigger-10"));
+        public IWebElement SucessMessage => _driver.FindElement(By.CssSelector(".alert.alert-success"));
         public IWebElement PageContent => _driver.FindElement(By.CssSelector(".alert.alert-danger"));
         public IWebElement NoteText => _driver.FindElement(By.Id("bugnote_text"));
         public IWebElement CreateNote => _driver.FindElement(By.CssSelector("input[type='submit'][value='Adicionar Anotação']"));
-        public IWebElement CommentsField => _driver.FindElement(By.CssSelector("#bugnotes tbody tr:last-child"));
+        public IWebElement TableComments => _driver.FindElement(By.CssSelector("#bugnotes table tbody"));
+        public IWebElement NoteCommentsField => TableComments.FindElement(By.CssSelector(".collapse-open.noprint"));
         private IWebElement SumaryIssue => _driver.FindElement(By.CssSelector(".bug-summary:not(.category)"));
 
         public void TypeElement(IWebElement element, string text)
@@ -147,6 +147,15 @@ namespace E2EMantis.Pages
         {
             string actualMessage = SumaryIssue.Text;
             Assert.IsTrue(actualMessage.Contains(expectedMessage), $"A mensagem atual '{actualMessage}' não contém a mensagem esperada '{expectedMessage}'.");
+        }
+
+        public void HasImageInCommentsField()
+        {
+
+            var images = NoteCommentsField.FindElements(By.CssSelector("img"));
+            bool imageCheck = images.Count() > 0;
+
+            Assert.IsTrue(imageCheck);
         }
     }
 }

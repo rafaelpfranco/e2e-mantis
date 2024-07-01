@@ -15,8 +15,10 @@ namespace E2EMantis.Interfaces
         IWebElement CreateIssueButton { get; }
         IWebElement DescriptionInput { get; }
         IWebElement PageContent { get; }
-        IWebElement CommentsField { get; }
         IWebElement CreateNote { get; }
+        IWebElement NoteCommentsField { get; }
+        IWebElement TableComments { get; }
+
 
         // Métodos adicionais
         void TypeElement(IWebElement element, string text);
@@ -29,5 +31,6 @@ namespace E2EMantis.Interfaces
         void CreateNoteIssue(string note);
         void CreateNoteWithImageIssue(string path);
         void SumarayValidate(string expectedMessage);
+        void HasImageInCommentsField();
     }
 }
